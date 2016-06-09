@@ -3,3 +3,4 @@
 ====================
 
 title: Category theory and Type system in Haskell
+author: Tomohiko Kinebuchi
