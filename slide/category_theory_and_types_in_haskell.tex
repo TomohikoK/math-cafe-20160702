@@ -7,6 +7,12 @@
 \usepackage{beamerthemeshadow}
 \usefonttheme{professionalfonts}
 
+\usepackage{verbatim}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+\newcommand{\mathint}[0]{\mathbb{Z}}
+
 % \newcommand{\term}[1][t]{\mathsf{#1}}
 % \newcommand{\type}[1][T]{\mathsf{#1}}
 % \newcommand{\var}[1][x]{\mathsf{#1}}
@@ -45,7 +51,9 @@
 % 話す内容
 
 \frame{
+  \frametitle{目次}
   \begin{itemize}
+  \item 想定聴者
   \item 下準備
     \begin{itemize}
     \item スライドの表記について
@@ -66,16 +74,101 @@
   \end{itemize}
 }
 
-% 対象
+% 想定聴者
 
 \frame{
-
+  \frametitle{想定聴者}
+  \begin{itemize}
+  \item プログラムの型は分かるが圏論を知らない人
+  \item 圏論は知っているがプログラム (の型) を知らない人
+  \end{itemize}
+  → プログラムの型が圏論を通してどう見えるかを解説していきます.
 }
 
-% [プ]
+\frame{
+  \frametitle{下準備 - スライドの表記について}
+  スライドのタイトルに目印を付け,
+  どちらの想定聴者に向けたスライドなのかを表します.
+  \begin{itemize}
+  \item プログラムの型は分かるが圏論を知らない人 \\
+    → [プ]
+  \item 圏論は知っているがプログラム (の型) を知らない人 \\
+    → [圏]
+  \end{itemize}
+}
 
-% [数]
+% Hask圏
+
+\frame{
+  \frametitle{[プ][圏] Haskellの型がなす圏 (Hask圏)}
+  \begin{itemize}
+  \item 対象: 型
+  \item 射: 一変数関数
+    \begin{itemize}
+    \item 恒等射: \code{id}関数 (引数をそのまま返す関数)
+    \item 射の合成: 関数の合成
+    \end{itemize}
+  \end{itemize}
+  関数$f$の変数の型が$A$, 返り値の型が$B$のとき, $f$は$A$から$B$への射となる.
+}
+
+\frame{
+  \frametitle{[プ][圏] 例. Hask圏の対象}
+  \begin{itemize}
+  \item Integer: 整数の型
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ][圏] 例. Hask圏の射}
+  \begin{itemize}
+  \item Haskellの関数\code{double}
+    \begin{itemize}
+    \item \verbatiminput{../code/double.hs}
+    \end{itemize}
+  \item 数学の関数$double$
+    \begin{itemize}
+    \item $double: \mathint \to \mathint$ \\
+      $double(x) = 2x$
+    \end{itemize}
+  \end{itemize}
+}
+
+% Functor
+
+%% 図式を図式にうつすもの (星座で書く?)
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
 
 
+% Applicative Functor
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+
+% 参考文献
+
+\frame{
+  \frametitle{参考文献}
+  
+}
+
+% おしまい
+
+\frame{
+  \frametitle{[プ][圏] おしまい}
+  % 圏と型の対応を再掲
+  Hask圏 (再掲)
+}
 
 \end{document}
