@@ -7,16 +7,13 @@
 \usepackage{beamerthemeshadow}
 \usefonttheme{professionalfonts}
 
+\usepackage{inconsolata}
 \usepackage{verbatim}
+\usepackage{hyperref}
 
 \newcommand{\code}[1]{\texttt{#1}}
 
 \newcommand{\mathint}[0]{\mathbb{Z}}
-
-% \newcommand{\term}[1][t]{\mathsf{#1}}
-% \newcommand{\type}[1][T]{\mathsf{#1}}
-% \newcommand{\var}[1][x]{\mathsf{#1}}
-% \newcommand{\letbind}[3]{\mathsf{let}\ #1\mathsf{=}#2\ \mathsf{in}\ #3}
 
 \title{圏とHaskellの型}
 \author{Kinebuchi Tomohiko}
@@ -86,6 +83,35 @@
 }
 
 \frame{
+  \frametitle{話すこと}
+  \begin{itemize}
+  \item Haskellの型の仕組み \\
+    型全体がある圏と見えること % undefined はややこしいので無視
+    \begin{tabular}{l|l}
+      \hline
+      Haskellの型 & 圏論の概念 \\
+      \hline \hline
+      型 & 対象 \\
+      関数 & 射 \\
+      Functor & 関手 \\
+      Monoid & モノイダル圏 \\
+      Applicative & モノイダル圏の一種 \\
+      \hline
+    \end{tabular}
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{話さないこと}
+  \begin{itemize}
+  \item 圏論一般の説明 \\
+    前の発表を参照してください
+  \item Haskellの文法
+  \item Haskellの良いプログラミング
+  \end{itemize}
+}
+
+\frame{
   \frametitle{下準備 - スライドの表記について}
   スライドのタイトルに目印を付け,
   どちらの想定聴者に向けたスライドなのかを表します.
@@ -121,18 +147,41 @@
 
 \frame{
   \frametitle{[プ][圏] 例. Hask圏の射}
+  なんだか見た目が似ている.
   \begin{itemize}
-  \item Haskellの関数\code{double}
-    \begin{itemize}
-    \item \verbatiminput{../code/double.hs}
-    \end{itemize}
-  \item 数学の関数$double$
-    \begin{itemize}
-    \item $double: \mathint \to \mathint$ \\
-      $double(x) = 2x$
-    \end{itemize}
+  \item Haskellの関数\code{double} \\
+    \verbatiminput{../code/double.hs}
+  \item 数学の関数$double$ \\
+    $double: \mathint \to \mathint$ \\
+    $double(x) = 2x$
   \end{itemize}
 }
+
+\frame{
+  \frametitle{[プ][圏] Haskellの型が圏をなすことの説明}
+  \begin{itemize}
+  \item 恒等射の存在: \code{id: a -> a} (\code{a}は任意の型)
+  \item 射の合成: Haskellの意味での関数の合成, \code{f . g}
+  \end{itemize}
+}
+
+%% idのついでに同型な対象の話もする? 例は何だろ? (正直あまり思い浮かばない, Evenを作っておくくらいかな?)
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+
 
 % Functor
 
@@ -145,8 +194,112 @@
   \end{itemize}
 }
 
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+% Monoidal Functor
+
+\frame{
+  \frametitle{[圏] モノイダル圏}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+
+\frame{
+  \frametitle{[圏] コヒーレンス条件}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[圏] コヒーレンス条件の必要性}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[圏] モノイド}
+  モノイダル圏はモノイドに類似した圏
+  \begin{definition}[モノイド]
+
+  \end{definition}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[圏] モノイダル関手 (monoidal functor)}
+  モノイドの準同型
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] HaskellのMonoid}
+  \verbatiminput{../code/monoid.hs}
+  \url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Monoid}
+}
+
+\frame{
+  \frametitle{[プ] Haskellのモノイド則 (Monoid law?)}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
 
 % Applicative Functor
+
+\frame{
+  \frametitle{[圏] アプリカティブ関手 (applicative functor)}
+  applicative関手はmonoidal関手の変種
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] HaskellのApplicative Functor}
+  \verbatiminput{../code/applicative.hs}
+  \url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Applicative} % BibTeX化
+}
+
+\frame{
+  \frametitle{[プ] HaskellのApplicative則 (Applicative law)}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
 
 \frame{
   \frametitle{}
@@ -162,6 +315,24 @@
   \frametitle{参考文献}
   
 }
+
+% 宣伝
+
+\frame{
+  \frametitle{数学茶屋}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{グッド・マス?}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+
 
 % おしまい
 
