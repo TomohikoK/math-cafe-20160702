@@ -44,6 +44,14 @@
 % ・・モノイダル函手
 % ・・Applicative函手
 
+%% 全体として[プ]→[圏]の流れ
+% 細かく言うと
+% ・[プ] 定義 (実コード)
+% ・・使い方の例
+% ・・意味
+% ・[圏] その裏にある概念, その定義
+% ・・補足
+% ・・プの人向けの補足
 
 % 話す内容
 
@@ -106,6 +114,7 @@
   \begin{itemize}
   \item 圏論一般の説明 \\
     前の発表を参照してください
+  \item プログラムの圏論的意味論 %[TODO] 表現を確認
   \item Haskellの文法
   \item Haskellの良いプログラミング
   \end{itemize}
@@ -123,6 +132,50 @@
   \end{itemize}
 }
 
+\frame{
+  \frametitle{[プ] 圏論とは}
+  (あくまでこの発表での圏論の使い方ですが)
+  「対象」と対象どうしをつなぐ「射」やそれらの「性質」という言葉で物事を記述する手法.
+
+  対象について語るとき, 他の対象との関係の性質という外部からの視点だけを使い,
+  「何からできているか?」という内部からの視点を使わないという特徴がある.
+
+  %[話] API (Javaのインターフェース (or Javadoc?), C, C++のヘッダファイルとか) だけを与えられて実装するようなもの
+  %[話] その代わりAPIの事前条件と事後条件についてはきっちり書いてある
+}
+
+\frame{
+  \frametitle{[プ] 圏論の例え?}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[圏] プログラムの型とは}
+  プログラムに登場する値の種類のこと
+
+  型の役割
+  \begin{itemize}
+  \item ソースコードを読みやすくする \\
+    ※ ソースコード = プログラムを記述したもの. テキスト形式のことが多い.
+  \item プログラムに間違いが無いことを (ある程度) 保証する
+    整数が期待されているところに文字列が現れるような間違いを事前に防ぐ
+    % 「事前」の説明を次のスライドで
+  \item プログラムの最適化に使われる
+    %[TODO] TAPLを調べる
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[圏] ソースコードのコンパイルについて}
+  
+  プログラムのソースコード
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
 % Hask圏
 
 \frame{
@@ -136,12 +189,16 @@
     \end{itemize}
   \end{itemize}
   関数$f$の変数の型が$A$, 返り値の型が$B$のとき, $f$は$A$から$B$への射となる.
+  \url{https://en.wikibooks.org/wiki/Haskell/Category_theory}
 }
 
 \frame{
   \frametitle{[プ][圏] 例. Hask圏の対象}
   \begin{itemize}
   \item Integer: 整数の型
+  \item String: 文字列の型
+  \item [Integer]: 整数のリストの型
+  \item Maybe String: 文字列の値があるか値がないことを表す型
   \end{itemize}
 }
 
@@ -163,6 +220,14 @@
   \item 恒等射の存在: \code{id: a -> a} (\code{a}は任意の型)
   \item 射の合成: Haskellの意味での関数の合成, \code{f . g}
   \end{itemize}
+  任意の
+}
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
 }
 
 %% idのついでに同型な対象の話もする? 例は何だろ? (正直あまり思い浮かばない, Evenを作っておくくらいかな?)
@@ -182,20 +247,20 @@
 }
 
 
-
 % Functor
 
 %% 図式を図式にうつすもの (星座で書く?)
 
+%% 型クラスの説明どうしよ?
+
 \frame{
-  \frametitle{}
-  \begin{itemize}
-  \item
-  \end{itemize}
+  \frametitle{[プ] HaskellのFunctor}
+  \verbatiminput{../code/functor.hs}
+  \url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Functor}
 }
 
 \frame{
-  \frametitle{}
+  \frametitle{[圏] 関手}
   \begin{itemize}
   \item
   \end{itemize}
@@ -240,7 +305,20 @@
 }
 
 \frame{
-  \frametitle{[圏] モノイド}
+  \frametitle{[プ] HaskellのMonoid}
+  \verbatiminput{../code/monoid.hs}
+  \url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Monoid}
+}
+
+\frame{
+  \frametitle{[プ] Haskellのモノイド則 (Monoid law?)}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[圏] モノイダル圏}
   モノイダル圏はモノイドに類似した圏
   \begin{definition}[モノイド]
 
@@ -259,19 +337,6 @@
 }
 
 \frame{
-  \frametitle{[プ] HaskellのMonoid}
-  \verbatiminput{../code/monoid.hs}
-  \url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Monoid}
-}
-
-\frame{
-  \frametitle{[プ] Haskellのモノイド則 (Monoid law?)}
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
   \frametitle{}
   \begin{itemize}
   \item
@@ -281,14 +346,6 @@
 % Applicative Functor
 
 \frame{
-  \frametitle{[圏] アプリカティブ関手 (applicative functor)}
-  applicative関手はmonoidal関手の変種
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
   \frametitle{[プ] HaskellのApplicative Functor}
   \verbatiminput{../code/applicative.hs}
   \url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Applicative} % BibTeX化
@@ -296,6 +353,14 @@
 
 \frame{
   \frametitle{[プ] HaskellのApplicative則 (Applicative law)}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[圏] アプリカティブ関手 (applicative functor)}
+  applicative関手はmonoidal関手の変種
   \begin{itemize}
   \item
   \end{itemize}
