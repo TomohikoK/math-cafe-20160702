@@ -22,7 +22,6 @@
 \begin{document}
 \frame{\titlepage}
 
-%% メモより
 % ・下準備
 % ・・[プ] 圏論とは
 % ・・・ref. Awodey
@@ -36,13 +35,6 @@
 % ・・・[プ] HaskellのFunctor
 % ・・・[数] 圏の函手
 % ・・・[プ] [数] 両者の類似、Functor則と函手の公理
-% ・・モノイダル圏
-% ・・・[プ] モノイドとは
-% ・・・[プ] モノイドの例、文字列、リスト
-% ・・・[数] モノイドの定義
-% ・・・[プ] [数] モノイダル圏の定義
-% ・・モノイダル函手
-% ・・Applicative函手
 
 %% 全体として[プ]→[圏]の流れ
 % 細かく言うと
@@ -94,16 +86,17 @@
   \frametitle{話すこと}
   \begin{itemize}
   \item Haskellの型の仕組み \\
-    型全体がある圏と見えること % undefined はややこしいので無視
+    % undefined はややこしいので無視
+    型全体がある圏と見えること \\
     \begin{tabular}{l|l}
       \hline
-      Haskellの型 & 圏論の概念 \\
+      Haskellの型システム & 圏論の概念 \\
       \hline \hline
       型 & 対象 \\
       関数 & 射 \\
+      tuple & 直積 \\
+      either & 直和 \\
       Functor & 関手 \\
-      Monoid & モノイダル圏 \\
-      Applicative & モノイダル圏の一種 \\
       \hline
     \end{tabular}
   \end{itemize}
@@ -145,7 +138,7 @@
 }
 
 \frame{
-  \frametitle{[プ] 圏論の例え?}
+  \frametitle{[プ] 圏論のふわっとした説明??}
   \begin{itemize}
   \item
   \end{itemize}
@@ -153,8 +146,8 @@
 
 \frame{
   \frametitle{[圏] プログラムの型とは}
-  プログラムに登場する値の種類のこと
-
+  「型」= プログラムに登場する値や式の種類のこと
+  % ここでスライドを分けるかも
   型の役割
   \begin{itemize}
   \item ソースコードを読みやすくする \\
@@ -170,7 +163,25 @@
 \frame{
   \frametitle{[圏] ソースコードのコンパイルについて}
 
-  プログラムのソースコード
+  「プログラムのソースコード」= 人間が読める形式でプログラムの振る舞いを記述したもの
+  % たまにバイナリを読める人もいますが
+  コンパイルという処理でコンピュータで実行できる形式に変換されるものもある
+  % 静的言語, 動的言語の話をする?
+  % 実行ファイルになるまでの過程をざっと書く,「型検査」は明記
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{}
   \begin{itemize}
   \item
   \end{itemize}
@@ -215,19 +226,21 @@
 }
 
 \frame{
+  \frametitle{[プ][圏] 例. Hask圏の射の始域と終域}
+  % 関数の型宣言の情報しか使わない
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
   \frametitle{[プ][圏] Haskellの型が圏をなすことの説明}
   \begin{itemize}
   \item 恒等射の存在: \code{id: a -> a} (\code{a}は任意の型)
   \item 射の合成: Haskellの意味での関数の合成, \code{f . g}
   \end{itemize}
-  任意の
-}
-
-\frame{
-  \frametitle{}
-  \begin{itemize}
-  \item
-  \end{itemize}
+  任意の関数\code{f, g}に対して\code{f . id = f, id . g = g}が成り立つ.
+  % 面倒なのでundefinedと副作用は無いものとする
 }
 
 %% idのついでに同型な対象の話もする? 例は何だろ? (正直あまり思い浮かばない, Evenを作っておくくらいかな?)
@@ -263,6 +276,48 @@
 
 \frame{
   \frametitle{[圏] 関手}
+  % 解説はされてるので, ここではさらっと思い出す
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] ファンクタ則 (Functor law)}
+  HaskellのFunctorが関手になること
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] 例. Maybe (1/2)}
+  % Maybe自体の解説, 何を表現しているのか, 元の型の拡張
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] 例. Maybe (2/2)}
+  % Maybeが関手になること, fmap showとかで説明
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] 例. List (1/2)}
+  % List [] 自体の解説, 何を表現しているのか
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] 例. List (2/2)}
+  % Listが関手になること
+  % [圏] 関数f(x)を自然にf({x})に拡張するのと同じ
   \begin{itemize}
   \item
   \end{itemize}
@@ -270,6 +325,7 @@
 
 \frame{
   \frametitle{[圏] 自然変換}
+  % 解説はされてるので, ここではさらっと思い出す
   \begin{itemize}
   \item
   \end{itemize}
@@ -277,23 +333,22 @@
 
 \frame{
   \frametitle{[プ] Hask圏で自然変換に対応するものは?}
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] 自然変換になる関数が持つ性質}
+  % たいていは型パラメータの違いは影響しない
+  \begin{itemize}
+  \item
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{[プ] 例. リストの先頭の要素を取り出す関数}
   % length, takeとか
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
-  \frametitle{}
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-% Monoidal Functor
-
-\frame{
-  \frametitle{}
   \begin{itemize}
   \item
   \end{itemize}
@@ -318,7 +373,9 @@
 
 \frame{
   \frametitle{参考文献}
-  
+  % H本
+  % Hackage
+  % WikiBooks https://en.wikibooks.org/wiki/Haskell/Category_theory
 }
 
 % 宣伝
@@ -345,6 +402,18 @@
   \frametitle{[プ][圏] おしまい}
   % 圏と型の対応を再掲
   Hask圏 (再掲)
+  \begin{tabular}{l|l}
+    \hline
+    Haskellの型システム & 圏論の概念 \\
+    \hline \hline
+    型 & 対象 \\
+    関数 & 射 \\
+    tuple & 直積 \\
+    either & 直和 \\
+    Functor & 関手 \\
+    ?? & 自然変換 \\
+    \hline
+  \end{tabular}
 }
 
 \end{document}
