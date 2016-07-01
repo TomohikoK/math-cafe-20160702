@@ -17,6 +17,8 @@
 
 \newcommand{\mathint}[0]{\mathbb{Z}}
 
+\newcommand{\category}[1]{\mathcal{#1}}
+
 \title{圏とHaskellの型}
 \author{Kinebuchi Tomohiko}
 \date{\today}
@@ -65,6 +67,7 @@
     \item tuple型
     \item Either型
     \item Functor
+    \item 自然変換
     \end{itemize}
   \item 参考文献
   \item 宣伝
@@ -119,20 +122,17 @@
 
 \frame{
   \frametitle{下準備 - スライドの表記について}
-  スライドのタイトルに目印を付け,
-  どちらの想定聴者に向けたスライドなのかを表します.
+  スライドのタイトルに目印を付け, どちら側の話なのかを表します.
   \begin{itemize}
-  \item プログラムの型は分かるが圏論を知らない人 \\
-    → [プ]
-  \item 圏論は知っているがプログラム (の型) を知らない人 \\
-    → [圏]
+  \item プログラミング側の話 → [プ]
+  \item 圏論側の話 → [圏]
   \end{itemize}
-  %[TODO] 圏論知ってる人? プログラミング知ってる人? と質問して手を挙げてもらう
+  %[TODO] 圏論知ってる人? プログラミング知ってる人? 型と圏の話を知ってる人? と質問して手を挙げてもらう
   %[TODO] GitHubのURLをどこかに書く
 }
 
 \frame{
-  \frametitle{[プ] 圏論とは}
+  \frametitle{[圏] 圏論とは}
   (あくまでこの発表での圏論の使い方ですが)
 
   「対象」と対象どうしをつなぐ「射」やそれらの「性質」という言葉で物事を記述する手法.
@@ -145,7 +145,7 @@
 }
 
 \frame{
-  \frametitle{[圏] プログラムの型とは}
+  \frametitle{[プ] プログラムの型とは}
   「型」とはプログラムに登場する値や式の種類のことで, その役割は
   \begin{itemize}
   \item プログラムの間違いの検出 \\
@@ -164,7 +164,7 @@
 }
 
 \frame{
-  \frametitle{[圏] ソースコードのコンパイルについて}
+  \frametitle{[プ] ソースコードの型検査について}
 
   「プログラムのソースコード」= 人間が読める形式でプログラムの振る舞いを記述したもの
   % たまにバイナリを読める人もいますが
@@ -214,13 +214,14 @@
   \begin{itemize}
   \item \code{Integer}: 整数の型
   \item \code{String}: 文字列の型
+  \item \code{Maybe String}: 文字列の値があることもしくは値が無いことを表す型
   \item \code{[Integer]}: 整数のリストの型
-  \item \code{Maybe String}: 文字列の値もしくは無効を表す値の型
   \end{itemize}
 }
 
 \frame{
   \frametitle{[プ][圏] 例. Hask圏の射}
+  Haskellの世界の$\code{double}$と数学の世界の$double$の見た目はなんだか似ている.
   \begin{itemize}
   \item Haskellの関数\code{double} \\
     \verbatiminput{../code/double.hs}
@@ -228,26 +229,35 @@
     $double: \mathint \to \mathint$ \\
     $double(x) = 2x$
   \end{itemize}
-  → なんだか見た目が似ている.
-}
 
-\frame{
-  \frametitle{[プ][圏] 例. Hask圏の射の始域と終域}
-  % 関数の型宣言の情報しか使わない
-  % 対象が値ではないことに注意
-  \begin{itemize}
-  \item
-  \end{itemize}
+  $\code{double}$関数を射と見たときの始域は$\code{Integer}$で終域も$\code{Integer}$です.
+  $\code{double}$関数の型宣言の情報のみを使っていて, 関数の定義の情報は使っていないことに注意してください.
 }
 
 \frame{
   \frametitle{[プ][圏] Haskellの型が圏をなすことの説明}
   \begin{itemize}
-  \item 恒等射の存在: \code{id :: a -> a} (\code{a}は任意の型)
-  \item 射の合成: Haskellの意味での関数の合成, \code{f . g}
+  \item 恒等射の存在: $\code{id :: a -> a}$ (\code{a}は任意の型)
+    \begin{itemize}
+    \item 任意の関数$\code{f}, \code{g}$に対して \\
+      $\code{f . id == f}$と$\code{id . g == g}$が成り立ちます.
+    \end{itemize}
+  \item 射の合成: $\code{f . g}$ (Haskellの意味での関数の合成)
+    \begin{itemize}
+    \item 任意の関数$\code{f}, \code{g}, \code{h}$に対して \\
+      $\code{(h . g) . f == h . (g . f)}$が成り立ちます.
+    \end{itemize}
   \end{itemize}
-  任意の関数\code{f, g}に対して\code{f . id = f, id . g = g}が成り立つ.
   % 面倒なのでundefinedと副作用は無いものとする
+}
+
+\frame{
+  \frametitle{[プ][圏] ここまでの内容で質疑応答}
+  \begin{itemize}
+  \item 「あのスライドをもう1回見せてほしい」
+  \item 「あそこの解説を聞き逃した」
+  \item 「あれってどういう意味?」
+  \end{itemize}
 }
 
 \frame{
@@ -259,14 +269,14 @@
   \end{framed}
   (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/Data.Tuple.html\#line-33})
 
-  → これに対応する圏論の概念は?
+  → これに対応する圏論の概念は何でしょう?
 }
 
 \frame{
   \frametitle{[圏] 積の復習}
   % 一般の圏の図式
-  圏$\mathcal{C}$の対象$X$, $Y$の積$\langle X \times Y, p, q \rangle$とは,
-  $X \times Y$が圏$\mathcal{C}$の対象,
+  圏$\category{C}$の対象$X$, $Y$の積$\langle X \times Y, p, q \rangle$とは,
+  $X \times Y$が圏$\category{C}$の対象,
   $p$が$p: X \times Y \rightarrow X$という射,
   $q$が$q: X \times Y \rightarrow Y$という射で次の条件を満たすものです.
   \def\objectstyle{\displaystyle}
@@ -278,7 +288,7 @@
     }
   }
   (条件)
-  任意の圏$\mathcal{C}$の対象$W$と射$k: W \rightarrow X$, $l: W \rightarrow Y$に対して,
+  任意の圏$\category{C}$の対象$W$と射$k: W \rightarrow X$, $l: W \rightarrow Y$に対して,
   射$h: W \rightarrow X \times Y$が1つだけあって
   \begin{align*}
     p \circ h &= k \\
@@ -325,14 +335,14 @@
   \end{framed}
   (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/Data.Either.html\#Either})
 
-  → これに対応する圏論の概念は?
+  → これに対応する圏論の概念は何でしょう?
 }
 
 \frame{
   \frametitle{[圏] 余積の復習}
   % 一般の圏の図式
-  圏$\mathcal{C}$の対象$X$, $Y$の余積$\langle X \coprod Y, i, j \rangle$とは,
-  $X \coprod Y$が圏$\mathcal{C}$の対象,
+  圏$\category{C}$の対象$X$, $Y$の余積$\langle X \coprod Y, i, j \rangle$とは,
+  $X \coprod Y$が圏$\category{C}$の対象,
   $i$が$i: X \rightarrow X \coprod Y$という射,
   $j$が$j: Y \rightarrow Y \coprod Y$という射で次の条件を満たすものです.
   \def\objectstyle{\displaystyle}
@@ -344,7 +354,7 @@
     }
   }
   (条件)
-  任意の圏$\mathcal{C}$の対象$W$と射$k: X \rightarrow W$, $l: Y \rightarrow W$に対して,
+  任意の圏$\category{C}$の対象$W$と射$k: X \rightarrow W$, $l: Y \rightarrow W$に対して,
   射$h: X \coprod Y \rightarrow W$が1つだけあって
   \begin{align*}
     h \circ i &= k \\
@@ -378,7 +388,9 @@
 
 \frame{
   \frametitle{[プ] $\code{h}$の例}
-  \verbatiminput{../code/either_h.hs}
+  \begin{framed}
+    \verbatiminput{../code/either_h.hs}
+  \end{framed}
   Haskellのパターンマッチで$\code{h}$を定義しているので,
   条件を満たすことが分かりやすくなっています.
 }
@@ -386,9 +398,9 @@
 \frame{
   \frametitle{[プ][圏] ここまでの内容で質疑応答}
   \begin{itemize}
-  \item あのスライドをもう1回見せてほしい
-  \item あそこの解説を聞き逃した
-  \item あれってどういう意味?
+  \item 「あのスライドをもう1回見せてほしい」
+  \item 「あそこの解説を聞き逃した」
+  \item 「あれってどういう意味?」
   \end{itemize}
 }
 
@@ -403,26 +415,97 @@
 
 \frame{
   \frametitle{[プ] HaskellのFunctor}
-  \verbatiminput{../code/functor.hs}
+  定義は以下の通りです.
+  \begin{framed}
+    \verbatiminput{../code/functor.hs}
+  \end{framed}
   (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Functor})
+
+  ある具体的なFunctorを$\code{f}$として, $\code{f}$の射関数$\code{fmap}$の型を宣言しています. \\
+  （「射関数」= 関手$F$によって射$f$を射$Ff$に写す関数のこと）
 }
 
 \frame{
   \frametitle{[圏] 関手の復習}
-  \xymatrix{
-    a
-  }
+  % 数学の関手の定義再掲
+  圏$\category{C}$から圏$\category{D}$への関手$F: \category{C} \rightarrow \category{D}$とは, \\
+  対応の組$F: Ob(\category{C}) \rightarrow Ob(\category{D})$,
+  $F: \mathtt{Hom}_{\category{C}}(X, Y) \rightarrow \mathtt{Hom}_{\category{D}}(FX, FY)$であって,
+  \begin{align*}
+    F1_{X} &= 1_{FX} \\
+    F(g \circ f) &= Fg \circ Ff
+  \end{align*}
+  を満たすもの.
 }
 
 \frame{
-  \frametitle{[プ] 例. Maybe (/n)}
-  % Maybeが関手になること, fmap showとかで説明
-  \code{Maybe}はHask圏からHask圏への関手
+  \frametitle{[プ] HaskellのFunctor則 (Functor law)}
+  % Functor則と関手の公理に対比
+  Functor則とはFunctorが満たすべき条件.
+  これに反する実装自体はできるものの, そうするメリットはあまり無いです.
+  \begin{framed}
+    \verbatiminput{../code/functor_law.hs}
+  \end{framed}
+  (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/Data-Functor.html\#t:Functor})
 
-  例: $\code{show :: Integer -> String}$
+  このFunctor則の2つの条件が, 関手が満たすべき2つの条件に対応しています. \\
+  → HaskellのFunctorは圏論での関手に対応
+}
+
+% 例. Maybe
+
+\frame{
+  \frametitle{[プ] $\code{Functor}$の例: $\code{Maybe}$}
+  % Maybe自体の解説, 何を表現しているのか, 元の型の拡張
+  $\code{Maybe}$とは, ある型の値がある状態と値がない空の状態をいっぺんに表せる型です.
+  定義は以下の通りです.
+  \begin{framed}
+    \verbatiminput{../code/maybe.hs}
+  \end{framed}
+  (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Maybe})
+
+  $\code{Nothing}$が「値が無いこと」に対応し, \\
+  $\code{Just a}$が「$\code{a}$という型の値があること」に対応しています.
+}
+
+\frame{
+  \frametitle{[プ] $\code{Maybe}$がFunctor則を満たすこと (1/2)}
+  $\code{Maybe}$の$\code{Functor}$としての定義は以下の通りです.
+  \begin{framed}
+    \verbatiminput{../code/functor_maybe.hs}
+  \end{framed}
+  (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#line-652})
+
+  $\code{Maybe a}$について$\code{Nothing}$の場合と$\code{Just a}$の場合のそれぞれで
+  Functor則を満たすことを確認すれば良いです.
+}
+
+\frame{
+  \frametitle{[プ] $\code{Maybe}$がFunctor則を満たすこと (2/2)}
+  確認
+  \begin{framed}
+    \verbatiminput{../code/proof_maybe.hs}
+  \end{framed}
+}
+
+\frame{
+  \frametitle{[プ][圏] \code{Maybe}で関数を写してみよう}
+  % Maybeが関手になること, fmap showとかで説明
+
+  例: 整数の値を取って, その文字列表現を返す関数$\code{int2str}$.
+
+  \begin{framed}
+    \verbatiminput{../code/int2str.hs}    
+  \end{framed}
+
+  この関数を$\code{Maybe}$で写すと, 以下のような
+  \begin{align*}
+    \code{fmap int2str :: Maybe Integer -> Maybe String}
+  \end{align*}
+  という関数になります.
   \xymatrix{
     \text{Hask圏} & & \text{Hask圏} & \\
-    \code{Integer} \ar[r]^{\code{show}} & \code{String} \ar@{=>}[r]^-{\code{Maybe}} & \code{Maybe Integer} \ar[r]^{\code{fmap show}} & \code{Maybe String}
+    \code{Integer} \ar[r]^{\code{int2str}} & \code{String} \ar@{=>}[r]^-{\code{Maybe}} & \code{Maybe Integer} \ar[r]^{\code{fmap int2str}} & \code{Maybe String}
     \save "1,1"."1,2"."2,1"."2,2"*\frm<10pt>{-}
     \restore
     \save "1,3"."1,4"."2,3"."2,4"*\frm<10pt>{-}
@@ -431,43 +514,10 @@
 }
 
 \frame{
-  \frametitle{[プ] Functor則 (Functor law)}
-  Functor則とは
-  \begin{itemize}
-  \item
-  \end{itemize}
-  Functor則と関手の公理の対応
-  \begin{itemize}
-  \item
-  \end{itemize}
-  HaskellのFunctorが関手になる
-}
-
-\frame{
-  \frametitle{[プ] 例. Maybe (/n)}
-  % Maybe自体の解説, 何を表現しているのか, 元の型の拡張
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
-  \frametitle{[プ] 例. Maybe (/n)}
+  \frametitle{[プ] ghciで調べてみる}
   \begin{framed}
-    \verbatiminput{../code/maybe.hs}
+    \verbatiminput{../code/maybe_int2str.ghci}
   \end{framed}
-  (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Maybe})
-}
-
-\frame{
-  \frametitle{[プ] MaybeがFunctor則を満たすこと (/n)}
-  \verbatiminput{../code/functor_maybe.hs}
-  (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#line-652})
-}
-
-\frame{
-  \frametitle{[プ] MaybeがFunctor則を満たすこと}
-
 }
 
 % Listのスライドの並びはMaybeと全く一緒
@@ -506,6 +556,15 @@
   }
 }
 
+\frame{
+  \frametitle{[プ][圏] ここまでの内容で質疑応答}
+  \begin{itemize}
+  \item 「あのスライドをもう1回見せてほしい」
+  \item 「あそこの解説を聞き逃した」
+  \item 「あれってどういう意味?」
+  \end{itemize}
+}
+
 % さてここで
 
 \frame{
@@ -526,6 +585,7 @@
   \begin{itemize}
   \item
   \end{itemize}
+  → さて何があるでしょう?
 }
 
 \frame{
