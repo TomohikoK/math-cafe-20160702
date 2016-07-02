@@ -28,8 +28,6 @@
 
 % ・下準備
 % ・・[プ] 圏論とは
-% ・・・ref. Awodey
-% ・・・TODO: Awodey読んでおく
 % ・・[数] プログラムの型とは
 % ・・・型の嬉しさ ref. TAPL
 % ・主題
@@ -61,7 +59,7 @@
     \item 圏論とは
     \item プログラムの型とは
     \end{itemize}
-  \item Haskellの型を圏として見る
+  \item Haskellの型全体を圏として見る
     \begin{itemize}
     \item Hask圏
     \item tuple型
@@ -132,6 +130,12 @@
 }
 
 \frame{
+  \frametitle{スライドの入手先}
+  \url{https://github.com/TomohikoK/math-cafe-20160702}
+  LaTeXファイルを手に入れて嬉しい人向け
+}
+
+\frame{
   \frametitle{[圏] 圏論とは}
   (あくまでこの発表での圏論の使い方ですが)
 
@@ -163,33 +167,6 @@
   ref.『Types and Programming Languages』(Benjamin C. Pierce)
 }
 
-\frame{
-  \frametitle{[プ] ソースコードの型検査について}
-
-  「プログラムのソースコード」= 人間が読める形式でプログラムの振る舞いを記述したもの
-  % たまにバイナリを読める人もいますが
-  コンパイルという処理でコンピュータで実行できる形式に変換されるものもある
-  % 静的言語, 動的言語の話をする?
-  % 実行ファイルになるまでの過程をざっと書く,「型検査」は明記
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
-  \frametitle{}
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
-  \frametitle{}
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
 % Hask圏
 
 \frame{
@@ -198,15 +175,32 @@
   \item 対象: 型
   \item 射: 一変数関数
     \begin{itemize}
-    \item 恒等射: \code{id}関数 (引数をそのまま返す関数)
-    \item 射の合成: 関数の合成
+    \item 恒等射: $\code{id}$関数 (引数をそのまま返す関数)
+    \item 射の合成: $\code{f . g}$ (Haskellの意味での関数の合成)
     \end{itemize}
   \end{itemize}
-  関数$f$の変数の型が$A$, 返り値の型が$B$のとき, $f$は$A$から$B$への射となります.
+  関数$f$の変数の型が$A$, 返り値の型が$B$のとき, $f$を$A$から$B$への射とします.
   (\url{https://en.wikibooks.org/wiki/Haskell/Category_theory})
+  %[話] \code{undefined}や副作用とかややこしいので純粋な関数だけにしておく
 }
 
-% 「\code{undefined}や副作用とかややこしいので純粋な関数だけにする」という話をする
+\frame{
+  \frametitle{[プ][圏] Haskellの型が圏をなすことの説明}
+  \begin{itemize}
+  \item 恒等射についての条件:
+    \begin{itemize}
+    \item 任意の関数$\code{f}, \code{g}$に対して \\
+      $\code{f . id == f}$と$\code{id . g == g}$が成り立ちます.
+    \end{itemize}
+  \item 射の合成についての条件:
+    \begin{itemize}
+    \item 任意の関数$\code{f}, \code{g}, \code{h}$に対して \\
+      $\code{(h . g) . f == h . (g . f)}$が成り立ちます.
+    \end{itemize}
+  \end{itemize}
+  → Haskellの型が圏をなすことが分かりました.
+  % 面倒なのでundefinedと副作用は無いものとする
+}
 
 \frame{
   \frametitle{[プ][圏] 例. Hask圏の対象}
@@ -214,7 +208,7 @@
   \begin{itemize}
   \item \code{Integer}: 整数の型
   \item \code{String}: 文字列の型
-  \item \code{Maybe String}: 文字列の値があることもしくは値が無いことを表す型
+  \item \code{Maybe String}: 文字列の値がある状態もしくは値が無い状態を表す型
   \item \code{[Integer]}: 整数のリストの型
   \end{itemize}
 }
@@ -232,23 +226,6 @@
 
   $\code{double}$関数を射と見たときの始域は$\code{Integer}$で終域も$\code{Integer}$です.
   $\code{double}$関数の型宣言の情報のみを使っていて, 関数の定義の情報は使っていないことに注意してください.
-}
-
-\frame{
-  \frametitle{[プ][圏] Haskellの型が圏をなすことの説明}
-  \begin{itemize}
-  \item 恒等射の存在: $\code{id :: a -> a}$ (\code{a}は任意の型)
-    \begin{itemize}
-    \item 任意の関数$\code{f}, \code{g}$に対して \\
-      $\code{f . id == f}$と$\code{id . g == g}$が成り立ちます.
-    \end{itemize}
-  \item 射の合成: $\code{f . g}$ (Haskellの意味での関数の合成)
-    \begin{itemize}
-    \item 任意の関数$\code{f}, \code{g}, \code{h}$に対して \\
-      $\code{(h . g) . f == h . (g . f)}$が成り立ちます.
-    \end{itemize}
-  \end{itemize}
-  % 面倒なのでundefinedと副作用は無いものとする
 }
 
 \frame{
@@ -276,9 +253,9 @@
   \frametitle{[圏] 積の復習}
   % 一般の圏の図式
   圏$\category{C}$の対象$X$, $Y$の積$\langle X \times Y, p, q \rangle$とは,
-  $X \times Y$が圏$\category{C}$の対象,
-  $p$が$p: X \times Y \rightarrow X$という射,
-  $q$が$q: X \times Y \rightarrow Y$という射で次の条件を満たすものです.
+  圏$\category{C}$の対象$X \times Y$,
+  射$p: X \times Y \rightarrow X$,
+  射$q: X \times Y \rightarrow Y$の組で, 次の条件を満たすものです.
   \def\objectstyle{\displaystyle}
   \def\labelstyle{\displaystyle}
   \centerline{
@@ -301,7 +278,7 @@
   \frametitle{[プ][圏] 直積型がHask圏の積であること}
   % Hask圏の図式
   直積型がHask圏の積になるためには次の条件を満たす必要があります. \\
-  (条件) $\code{a}$, $\code{b}$, $\code{c}$を任意の型,
+  (条件) $\code{a}$, $\code{b}$, $\code{c}$を任意の型とし,
   $\code{k :: c -> a}$, $\code{l :: c -> b}$を任意の関数としたとき,
   関数$\code{h :: c -> (a, b)}$があって
   \begin{align*}
@@ -323,7 +300,9 @@
 \frame{
   \frametitle{[プ] $\code{h}$の例}
   作為的な例ですが.
-  \verbatiminput{../code/tuple_h.hs}
+  \begin{framed}
+    \verbatiminput{../code/tuple_h.hs}
+  \end{framed}
 }
 
 \frame{
@@ -342,9 +321,9 @@
   \frametitle{[圏] 余積の復習}
   % 一般の圏の図式
   圏$\category{C}$の対象$X$, $Y$の余積$\langle X \coprod Y, i, j \rangle$とは,
-  $X \coprod Y$が圏$\category{C}$の対象,
-  $i$が$i: X \rightarrow X \coprod Y$という射,
-  $j$が$j: Y \rightarrow Y \coprod Y$という射で次の条件を満たすものです.
+  圏$\category{C}$の対象$X \coprod Y$,
+  射$i: X \rightarrow X \coprod Y$,
+  射$j: Y \rightarrow Y \coprod Y$の組で, 次の条件を満たすものです.
   \def\objectstyle{\displaystyle}
   \def\labelstyle{\displaystyle}
   \centerline{
@@ -367,7 +346,7 @@
   \frametitle{[プ][圏] 直和型がHask圏の余積であること}
   % Hask圏の図式
   直和型がHask圏の余積になるためには次の条件を満たす必要があります. \\
-  (条件) $\code{a}$, $\code{b}$, $\code{c}$を任意の型,
+  (条件) $\code{a}$, $\code{b}$, $\code{c}$を任意の型とし,
   $\code{k :: a -> c}$, $\code{l :: b -> c}$を任意の関数としたとき,
   関数$\code{h :: Either a b -> c}$があって
   \begin{align*}
@@ -428,7 +407,7 @@
 \frame{
   \frametitle{[圏] 関手の復習}
   % 数学の関手の定義再掲
-  圏$\category{C}$から圏$\category{D}$への関手$F: \category{C} \rightarrow \category{D}$とは, \\
+  圏$\category{C}$から圏$\category{D}$への関手$F: \category{C} \rightarrow \category{D}$とは,
   対応の組$F: Ob(\category{C}) \rightarrow Ob(\category{D})$,
   $F: \mathtt{Hom}_{\category{C}}(X, Y) \rightarrow \mathtt{Hom}_{\category{D}}(FX, FY)$であって,
   \begin{align*}
@@ -449,7 +428,7 @@
   (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/Data-Functor.html\#t:Functor})
 
   このFunctor則の2つの条件が, 関手が満たすべき2つの条件に対応しています. \\
-  → HaskellのFunctorは圏論での関手に対応
+  → HaskellのFunctorと圏論での関手に対応
 }
 
 % 例. Maybe
@@ -482,7 +461,6 @@
 
 \frame{
   \frametitle{[プ] $\code{Maybe}$がFunctor則を満たすこと (2/2)}
-  確認
   \begin{framed}
     \verbatiminput{../code/proof_maybe.hs}
   \end{framed}
@@ -498,7 +476,7 @@
     \verbatiminput{../code/int2str.hs}    
   \end{framed}
 
-  この関数を$\code{Maybe}$で写すと, 以下のような
+  この関数を$\code{Maybe}$で写すと,
   \begin{align*}
     \code{fmap int2str :: Maybe Integer -> Maybe String}
   \end{align*}
@@ -514,33 +492,33 @@
 }
 
 \frame{
-  \frametitle{[プ] ghciで調べてみる}
+  \frametitle{[プ] ghciで動かしてみる}
   \begin{framed}
     \verbatiminput{../code/maybe_int2str.ghci}
   \end{framed}
 }
 
-% Listのスライドの並びはMaybeと全く一緒
+% 例. List
 
 \frame{
-  \frametitle{[プ] 例. List (/n)}
+  \frametitle{[プ] $\code{Functor}$例. List}
   % List [] 自体の解説, 何を表現しているのか
   % [圏] 関数f(x)を自然にf({x})に拡張するのと似ている
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
-  \frametitle{[プ] 例. List (/n)}
+  Listとは, ある型の値を0個以上並べたものの型です.
+  定義は以下の通りです
   \begin{framed}
     \verbatiminput{../code/list.hs}
   \end{framed}
   (\url{https://hackage.haskell.org/package/ghc-prim-0.4.0.0/candidate/docs/src/GHC-Types.html\#line-33})
+
+  右辺の$\code{[]}$が空のリストを表し, \\
+  $\code{a : [a]}$がリストの前に要素を1つ追加したものを表します. \\
+  リストの定義では再帰的な定義が使われています.
 }
 
 \frame{
-  \frametitle{[プ] 例. List (/n)}
+  \frametitle{[プ] ListがFunctor則を満たすこと (1/3)}
+  Listの$\code{Functor}$としての定義は以下の通りです.
   \begin{framed}
     \verbatiminput{../code/functor_list.hs}
   \end{framed}
@@ -548,12 +526,54 @@
 }
 
 \frame{
-  \frametitle{[プ] 例. List (/n)}
-  % Listが関手になること
-  Hask圏からHask圏への関手\code{Maybe}
+  \frametitle{[プ] ListがFunctor則を満たすこと (2/3)}
+  $\code{map}$関数の定義は以下の通りです.
+  \begin{framed}
+    \verbatiminput{../code/list_map.hs}
+  \end{framed}
+  (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#line-868})
+
+  Listについて$\code{[]}$の場合と$\code{a : [a]}$の場合のそれぞれで
+  Functor則を満たすことを確認すれば良いです.
+}
+
+\frame{
+  \frametitle{[プ] ListがFunctor則を満たすこと (3/3)}
+  \begin{framed}
+    \verbatiminput{../code/proof_list.hs}
+  \end{framed}
+}
+
+\frame{
+  \frametitle{[プ][圏] Listで関数を写してみよう}
+  % Listが関手になること, fmap showとかで説明
+
+  例: 整数の値を取って, その文字列表現を返す関数$\code{int2str}$.
+
+  \begin{framed}
+    \verbatiminput{../code/int2str.hs}    
+  \end{framed}
+
+  この関数をListで写すと,
+  \begin{align*}
+    \code{fmap int2str :: [Integer] -> [String]}
+  \end{align*}
+  という関数になります.
   \xymatrix{
-    \code{Integer} \ar[r]^{\code{show}} & \code{String} & \code{[Integer]} \ar[r]^{\code{fmap show}} & \code{[String]}
+    \text{Hask圏} & & \text{Hask圏} & \\
+    \code{Integer} \ar[r]^{\code{int2str}} & \code{String} \ar@{=>}[r]^-{List} & \code{[Integer]} \ar[r]^{\code{fmap int2str}} & \code{[String]}
+    \save "1,1"."1,2"."2,1"."2,2"*\frm<10pt>{-}
+    \restore
+    \save "1,3"."1,4"."2,3"."2,4"*\frm<10pt>{-}
+    \restore
   }
+}
+
+\frame{
+  \frametitle{[プ] ghciで動かしてみる}
+  \begin{framed}
+    \verbatiminput{../code/list_int2str.ghci}
+  \end{framed}
 }
 
 \frame{
@@ -565,57 +585,34 @@
   \end{itemize}
 }
 
-% さてここで
+% さてここから自然変換
 
 \frame{
-  \frametitle{[圏] 自然変換}
+  \frametitle{[圏] 自然変換の復習}
   % 解説はされてるので, ここではさらっと思い出す
+  圏$\category{C}$, $\category{D}$と関手$F, G: \category{C} \rightarrow \category{D}$があったとき,
+  自然変換$\alpha: F \rightarrow G$とは射の集まり$\alpha_{X}: FX \rightarrow GX\ (X \in Ob(\category{C}))$であって,
+  $\forall f: X \rightarrow Y$に対し$\alpha_{Y} \circ Ff = Gf \circ \alpha_{X}$を満たすもの
   \def\objectstyle{\displaystyle}
   \def\labelstyle{\displaystyle}
-  \centerline{
-    \xymatrix@=60pt{
-      FX \ar[r]^{Ff} \ar[d]_{\alpha_X} & FY \ar[d]^{\alpha_Y} \\
-      GX \ar[r]^{Gf} & GY
+  \begin{framed}
+    \centerline{
+      \xymatrix@=60pt{
+        X \ar[r]^{f} & Y & FX \ar[r]^{Ff} \ar[d]^{\alpha_X} & FY \ar[d]^{\alpha_Y} \\
+        & & GX \ar[r]^{Gf} & GY
+      }
     }
-  }
-}
-
-\frame{
-  \frametitle{[プ] Hask圏で自然変換に対応するものは?}
-  \begin{itemize}
-  \item
-  \end{itemize}
-  → さて何があるでしょう?
-}
-
-\frame{
-  \frametitle{[プ] 自然変換に対応する関数が持つ性質}
-  % たいていは型パラメータの違いは影響しない
-  \begin{itemize}
-  \item
-  \end{itemize}
+  \end{framed}
+  → さてHask圏で自然変換になるものは何があるでしょう?
 }
 
 \frame{
   \frametitle{[プ] 例. リストの先頭の要素を取り出す関数}
   % takeとか, List -> Maybe
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
-  \frametitle{}
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-\frame{
-  \frametitle{}
-  \begin{itemize}
-  \item
-  \end{itemize}
+  % たいていは型パラメータの違いは影響しない
+  \begin{framed}
+    \verbatiminput{../code/takeFirst.hs}
+  \end{framed}
 }
 
 
@@ -629,44 +626,42 @@
   % H本
   % Hackage
   % WikiBooks https://en.wikibooks.org/wiki/Haskell/Category_theory
+  % 圏論の基礎
 }
 
 % 宣伝
 
 \frame{
   \frametitle{数学茶屋}
+  「フリートーク中心の数学好きの集まり」
   \begin{itemize}
-  \item
+  \item 和コンセプト
+  \item 時期は9月
+  \item 場所は渋谷近辺
+  \item 人数は20人くらい
+  \item Facebook → \url{https://www.facebook.com/MathTeaHouse}
   \end{itemize}
 }
-
-\frame{
-  \frametitle{グッド・マス?}
-  \begin{itemize}
-  \item
-  \end{itemize}
-}
-
-
 
 % おしまい
 
 \frame{
   \frametitle{[プ][圏] おしまい}
-  % 圏と型の対応を再掲
-  Hask圏 (再掲) \\
-  \begin{tabular}{l|l}
-    \hline
-    Haskellの型システム & 圏論の概念 \\
-    \hline \hline
-    型 & 対象 \\
-    関数 & 射 \\
-    tuple型 & 直積 \\
-    Either型 & 直和 \\
-    Functor & 関手 \\
-    Listのtakeなど & 自然変換 \\
-    \hline
-  \end{tabular}
+  Haskellの型と圏論の概念の対応 (再掲)
+  \centerline{
+    \begin{tabular}{l|l}
+      \hline
+      Haskellの型システム & 圏論の概念 \\
+      \hline \hline
+      型 & 対象 \\
+      関数 & 射 \\
+      tuple型 & 直積 \\
+      Either型 & 直和 \\
+      Functor & 関手 \\
+      Listのtakeなど & 自然変換 \\
+      \hline
+    \end{tabular}
+  }
 }
 
 \end{document}

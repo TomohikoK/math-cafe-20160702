@@ -1,0 +1,14 @@
+$ ghci
+Prelude> :load int2str.hs
+Prelude> :t int2str
+int2str :: Integer -> String
+
+Prelude> :t fmap int2str
+fmap int2str :: Functor f => f Integer -> f String
+
+Prelude> [1]
+"1"
+Prelude> fmap int2str [1, 2, 3]
+["1","2","3"]
+Prelude> fmap int2str []
+[]
