@@ -21,7 +21,7 @@
 
 \title{圏とHaskellの型}
 \author{Kinebuchi Tomohiko}
-\date{\today}
+\date{2016-07-01}
 
 \begin{document}
 \frame{\titlepage}
@@ -88,8 +88,8 @@
 
 \frame{
   \frametitle{話すこと}
-  \begin{itemize}
-  \item Haskellの型の仕組みと圏論の対応 \\
+  \centerline{Haskellの型の仕組みと圏論の対応}
+  \centerline{
     \begin{tabular}{l|l}
       \hline
       Haskellの型システム & 圏論の概念 \\
@@ -102,7 +102,7 @@
       (ある種の関数) & 自然変換 \\
       \hline
     \end{tabular}
-  \end{itemize}
+  }
   Haskellの型システムが圏論に支えられている実例を見ていきます. \\
 }
 
@@ -125,14 +125,18 @@
   \item プログラミング側の話 → [プ]
   \item 圏論側の話 → [圏]
   \end{itemize}
-  %[TODO] 圏論知ってる人? プログラミング知ってる人? 型と圏の話を知ってる人? と質問して手を挙げてもらう
-  %[TODO] GitHubのURLをどこかに書く
+  %[話] 圏論知ってる人? プログラミング知ってる人? 型と圏の話を知ってる人? と質問して手を挙げてもらう
 }
 
 \frame{
-  \frametitle{スライドの入手先}
+  \frametitle{スライドとソースコードの入手先}
   \url{https://github.com/TomohikoK/math-cafe-20160702}
-  LaTeXファイルを手に入れて嬉しい人向け
+
+  LaTeXファイルとHaskellソースコードを手に入れて嬉しい人向けです.
+  何かあれば私のTwitterアカウント (\url{https://twitter.com/kinebuchitomo}) に話し掛けるか,
+  GitHubのissueに書いてください.
+
+  \texttt{.hs}という拡張子のファイルは, ghciで\texttt{:load}コマンドで読み込めます.
 }
 
 \frame{
@@ -154,12 +158,10 @@
   \begin{itemize}
   \item プログラムの間違いの検出 \\
     整数が期待されているところに文字列が現れるなどの間違いを事前に見付ける.
-    % 「事前」の説明を次のスライドで
   \item 抽象化, インターフェースの定義 \\
     値や関数の重要な性質だけに着目する.
   \item ソースコードを読みやすくする. \\
-    「ソースコード」とはプログラムを記述したもの.
-    % 「ソースコード」の説明を次のスライドで
+    「ソースコード」とはプログラムを人間が読める形で記述したもの.
     % 言語の安全性については説明し切れないので割愛
   \item プログラムの最適化 \\
     型の情報を使って, より高速なプログラムを生成する.
@@ -401,7 +403,7 @@
   (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/src/GHC.Base.html\#Functor})
 
   ある具体的なFunctorを$\code{f}$として, $\code{f}$の射関数$\code{fmap}$の型を宣言しています. \\
-  （「射関数」= 関手$F$によって射$f$を射$Ff$に写す関数のこと）
+  （「射関数」= 関手$F$が写す対象と射のうち射の方だけを考えたもの. 射$f$を射$Ff$に写す関数のこと.）
 }
 
 \frame{
@@ -423,7 +425,7 @@
   Functor則とはFunctorが満たすべき条件.
   これに反する実装自体はできるものの, そうするメリットはあまり無いです.
   \begin{framed}
-    \verbatiminput{../code/functor_law.hs}
+    \verbatiminput{../code/functor.law}
   \end{framed}
   (\url{https://hackage.haskell.org/package/base-4.9.0.0/docs/Data-Functor.html\#t:Functor})
 
@@ -462,7 +464,7 @@
 \frame{
   \frametitle{[プ] $\code{Maybe}$がFunctor則を満たすこと (2/2)}
   \begin{framed}
-    \verbatiminput{../code/proof_maybe.hs}
+    \verbatiminput{../code/maybe.proof}
   \end{framed}
 }
 
@@ -527,6 +529,7 @@
 
 \frame{
   \frametitle{[プ] ListがFunctor則を満たすこと (2/3)}
+  $\code{Functor}$としてのListの定義に出てきた
   $\code{map}$関数の定義は以下の通りです.
   \begin{framed}
     \verbatiminput{../code/list_map.hs}
@@ -540,7 +543,7 @@
 \frame{
   \frametitle{[プ] ListがFunctor則を満たすこと (3/3)}
   \begin{framed}
-    \verbatiminput{../code/proof_list.hs}
+    \verbatiminput{../code/list.proof}
   \end{framed}
 }
 
@@ -610,9 +613,45 @@
   \frametitle{[プ] 例. リストの先頭の要素を取り出す関数}
   % takeとか, List -> Maybe
   % たいていは型パラメータの違いは影響しない
+  リストの1つ目の要素を取り出す関数$\code{takeFirst}$を次のように定義します.
+  リストが空だった場合は$\code{Nothing}$を返しておきます.
   \begin{framed}
     \verbatiminput{../code/takeFirst.hs}
   \end{framed}
+  プログラミングに出てくる自然変換では, 型変数$\code{a}$が何かには依存しない場合が多いです.
+  (むしろ依存されると気持ち悪いです.)
+}
+
+\frame{
+  \frametitle{[プ] $\code{takeFirst}$は自然変換}
+  $\code{takeFirst}$は自然変換なので,
+  \begin{itemize}
+  \item 整数のリストからそれぞれの要素の文字列表現のリストを作り, その先頭の要素を取り出す処理 (→↓のルート)
+  \item 整数のリストの先頭の要素を取り出して, 整数をその文字列表現に変換する処理 (↓→のルート)
+  \end{itemize}
+  が同じ結果になります.
+  \centerline{
+    \xymatrix@=60pt{
+      \code{[Integer]} \ar[r]^{\code{fmap show}} \ar[d]^{\code{takeFirst}} & \code{[String]} \ar[d]^{\code{takeFirst}} \\
+      \code{Maybe Integer} \ar[r]^{\code{fmap show}} & \code{Maybe String}
+    }
+  }
+}
+
+\frame{
+  \frametitle{[プ] 具体的な値で$\code{takeFirst}$の動きを見ましょう}
+  \centerline{
+    \xymatrix@=60pt{
+      \code{[1, 2, 3]} \ar@{|->}[r]^{\code{fmap show}} \ar@{|->}[d]^{\code{takeFirst}} & \code{["1","2","3"]} \ar@{|->}[d]^{\code{takeFirst}} \\
+      \code{Just 1} \ar@{|->}[r]^{\code{fmap show}} & \code{Just "1"}
+    }
+  }
+  \centerline{
+    \xymatrix@=60pt{
+      \code{[]} \ar@{|->}[r]^{\code{fmap show}} \ar@{|->}[d]^{\code{takeFirst}} & \code{[]} \ar@{|->}[d]^{\code{takeFirst}} \\
+      \code{Nothing} \ar@{|->}[r]^{\code{fmap show}} & \code{Nothing}
+    }
+  }
 }
 
 
@@ -621,12 +660,15 @@
 \frame{
   \frametitle{参考文献}
   \begin{itemize}
-  \item 『』
+  \item 『すごいHaskellたのしく学ぼう!』(Miran Lipovaca・著／田中英行・村主崇行・共訳)
+  \item WikiBooks「Haskell/Category theory」 \url{https://en.wikibooks.org/wiki/Haskell/Category_theory}
+  \item Hackage \url{https://hackage.haskell.org/}
+  \item 『圏論の基礎』(S.マックレーン 著, 三好博之／高木理 訳)
+  \item 『Types and Programming Languages』(Benjamin C. Pierce)
+    \begin{itemize}
+    \item 『型システム入門』(住井英二郎 監訳, 遠藤侑介・酒井政裕・今井敬吾・黒木裕介・今井宜洋・才川隆文・今井健男 共訳)
+    \end{itemize}
   \end{itemize}
-  % H本
-  % Hackage
-  % WikiBooks https://en.wikibooks.org/wiki/Haskell/Category_theory
-  % 圏論の基礎
 }
 
 % 宣伝
@@ -647,7 +689,7 @@
 
 \frame{
   \frametitle{[プ][圏] おしまい}
-  Haskellの型と圏論の概念の対応 (再掲)
+  \centerline{Haskellの型と圏論の概念の対応 (再掲)}
   \centerline{
     \begin{tabular}{l|l}
       \hline
