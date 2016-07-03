@@ -470,7 +470,7 @@
 
 \frame{
   \frametitle{[プ][圏] \code{Maybe}で関数を写してみよう}
-  % Maybeが関手になること, fmap showとかで説明
+  % Maybeが関手になること, fmap int2strで説明
 
   例: 整数の値を取って, その文字列表現を返す関数$\code{int2str}$.
 
@@ -549,7 +549,7 @@
 
 \frame{
   \frametitle{[プ][圏] Listで関数を写してみよう}
-  % Listが関手になること, fmap showとかで説明
+  % Listが関手になること, fmap int2strで説明
 
   例: 整数の値を取って, その文字列表現を返す関数$\code{int2str}$.
 
@@ -632,8 +632,8 @@
   が同じ結果になります.
   \centerline{
     \xymatrix@=60pt{
-      \code{[Integer]} \ar[r]^{\code{fmap show}} \ar[d]^{\code{takeFirst}} & \code{[String]} \ar[d]^{\code{takeFirst}} \\
-      \code{Maybe Integer} \ar[r]^{\code{fmap show}} & \code{Maybe String}
+      \code{[Integer]} \ar[r]^{\code{fmap int2str}} \ar[d]^{\code{takeFirst}} & \code{[String]} \ar[d]^{\code{takeFirst}} \\
+      \code{Maybe Integer} \ar[r]^{\code{fmap int2str}} & \code{Maybe String}
     }
   }
 }
@@ -642,14 +642,14 @@
   \frametitle{[プ] 具体的な値で$\code{takeFirst}$の動きを見ましょう}
   \centerline{
     \xymatrix@=60pt{
-      \code{[1, 2, 3]} \ar@{|->}[r]^{\code{fmap show}} \ar@{|->}[d]^{\code{takeFirst}} & \code{["1","2","3"]} \ar@{|->}[d]^{\code{takeFirst}} \\
-      \code{Just 1} \ar@{|->}[r]^{\code{fmap show}} & \code{Just "1"}
+      \code{[1, 2, 3]} \ar@{|->}[r]^{\code{fmap int2str}} \ar@{|->}[d]^{\code{takeFirst}} & \code{["1","2","3"]} \ar@{|->}[d]^{\code{takeFirst}} \\
+      \code{Just 1} \ar@{|->}[r]^{\code{fmap int2str}} & \code{Just "1"}
     }
   }
   \centerline{
     \xymatrix@=60pt{
-      \code{[]} \ar@{|->}[r]^{\code{fmap show}} \ar@{|->}[d]^{\code{takeFirst}} & \code{[]} \ar@{|->}[d]^{\code{takeFirst}} \\
-      \code{Nothing} \ar@{|->}[r]^{\code{fmap show}} & \code{Nothing}
+      \code{[]} \ar@{|->}[r]^{\code{fmap int2str}} \ar@{|->}[d]^{\code{takeFirst}} & \code{[]} \ar@{|->}[d]^{\code{takeFirst}} \\
+      \code{Nothing} \ar@{|->}[r]^{\code{fmap int2str}} & \code{Nothing}
     }
   }
 }
